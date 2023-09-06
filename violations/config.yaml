@@ -1,0 +1,24 @@
+violation_labels:
+    - Violence
+    - Nudity or Sexual Activity
+    - Hate Speech
+    - Bullying or Harassment
+    - Scam or Fraud
+    - Suicide or Self-Harm
+    - Sale of Illegal/Regulated Goods
+    - Intellectual Property Violation
+    - Counterfeit Goods
+    - Dangerous Products or Services
+    - Controlled Substances
+    - Weapons or Ammunition
+    - Sexual Content
+    - Alcohol
+    - Gambling
+ad_categories:
+    - Counterfeit Goods\nAny content promoting products that mimic the brand features of another in an attempt to pass as genuine
+    - Dangerous Products or Services\nIncluding recreational drugs, psychoactive substances, weapons, ammunition, and explosives
+    - Controlled Substances\nContent that promotes the sale, distribution, or use of tobacco, illegal drugs, narcotics, or excessive alcohol
+    - Weapons or Ammunition\nContent promoting the sale, distribution, or use of firearms, weapons, or explosives
+    - Sexual Content\nGenerally allowed on a limited basis and often subject to age restrictions
+    - Alcohol\nRestricted and subject to age-related regulations
+    - Gambling\nReal money and simulated gambling content may be allowed with specific regulations
