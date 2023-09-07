@@ -29,7 +29,7 @@ class ViolationChecker:
         self.violation_labels = self.config['violation_labels']
         self.ad_categories = self.config['ad_categories']
 
-        self.clip_model = CLIPModel.from_pretrained(clip_path, torch_dtype = torch.float16).to(self.device)
+        self.clip_model = CLIPModel.from_pretrained(clip_path).to(self.device)
         self.clip_processor = AutoProcessor.from_pretrained(clip_path)
         self.tokenizer = AutoTokenizer.from_pretrained(clip_path)
 
@@ -158,7 +158,7 @@ checker = ViolationChecker(config_path = 'config.yaml')
 out = checker.get_results(ad_description = ad_description, video_path = "test.mp4")
 
 
-# print(out)
+print(out)
 # {'violation_labels': {'Violence': 0.759814453125,
 #   'Nudity or Sexual Activity': 0.0839385986328125,
 #   'Hate Speech': 0.377484130859375,
