@@ -1,12 +1,19 @@
-import logo from './logo.svg';
-import AdForm from "./form/form.js"
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import AdForm from './form/form.js';
+import Violation from './result/violation.js';
 import './App.css';
+import { useState } from 'react';
 
 function App() {
-  return (
-    <div className="App">
-      <AdForm/>
-    </div>
+    const [data, setData] = useState(null);
+    const updateParentState = (data) => {
+        setData(data);
+    }
+    return (
+      <div className="App">
+        {data ? <Violation data={data}/> : <AdForm setParentState={updateParentState}/>}
+      </div>
   );
 }
 

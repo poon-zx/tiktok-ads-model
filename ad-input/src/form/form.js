@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Card, TextField, Button, InputLabel, MenuItem, OutlinedInput, Select, FormControl } from '@mui/material';
-import { SelectChangeEvent } from '@mui/material/Select';
 import './form.css';
 import axios from 'axios';
+import Tiktok from '../tiktok.png'
 
-const AdForm = () => {
+const AdForm = ({setParentState}) => {
     const [formData, setFormData] = useState({
         adTitle: '',
         advertiserName: '',
@@ -12,11 +12,11 @@ const AdForm = () => {
         deliveryMarket: [],
         productLine: [],
         taskType: [],
+        startDate:'',
     });
     const [productLine, setProductLine] = useState([]);
     const [deliveryMarket, setDeliveryMarket] = useState([]);
     const [taskType, setTaskType] = useState([]);
-
     const fileUploadInput = useRef(null);
     const [selectedFile, setSelectedFile] = useState(null);
     
@@ -89,7 +89,7 @@ const AdForm = () => {
             e.preventDefault();
             
             const DEFAULT_FILE_NAME = 'videoFile';
-            const FILE_UPLOAD_ENDPOINT = 'https://d4c0-137-132-26-168.ngrok-free.app/upload';
+            const FILE_UPLOAD_ENDPOINT = 'https://29b9-137-132-26-116.ngrok-free.app/upload';
             const headers = {
                 'Content-Type': 'multipart/form-data',
               };
@@ -108,6 +108,8 @@ const AdForm = () => {
                 const response = await axios.post(FILE_UPLOAD_ENDPOINT, dataToSend, { headers });
           
                 console.log('Upload successful:', response.data);
+
+                setParentState(response.data);
           
                 // Now you can handle other form data submission if needed
               } catch (error) {
@@ -117,8 +119,12 @@ const AdForm = () => {
         };          
 
     return (
-        <div className="form-border">
-            <Card variant="outlined" sx = {{borderRadius: '8px'}} className="ad-card">
+        <div>
+            <div className="tiktok-box">
+                <img className="tiktok-logo" src={Tiktok} alt="tiktok-logo" style={{height: '6vh'}}/>
+            </div>
+            <div className="form-border">
+                <Card variant="outlined" sx = {{borderRadius: '8px'}} className="ad-card">
             <h1>Advertisement Form</h1>
             <form 
             onSubmit={handleSubmit}>
@@ -153,16 +159,33 @@ const AdForm = () => {
                 style={{ width: '90%' }}
                 />
 
+                <TextField
+                label="Start Date (DD/MM/YYYY)"
+                name="startDate"
+                value={formData.startDate}
+                onChange={handleChange}
+                fullWidth
+                margin="normal"
+                style={{ width: '90%' }}
+                />
+
                 <FormControl sx = {{width: '90%', marginTop: '15px'}}>
                     <InputLabel id="demo-multiple-name-label">Delivery Market</InputLabel>
                     <Select
                         labelId="demo-multiple-name-label"
                         id="demo-multiple-name"
-                        multiple
                         value={deliveryMarket}
                         onChange={handleArrayDeliveryMarket}
                         input={<OutlinedInput label="Delivery Market" />}
                         label="Delivery Market"
+                        MenuProps={{
+                            PaperProps: {
+                              style: {
+                                maxHeight: 270,
+                                width: 250,
+                              },
+                            },
+                        }}
              
                     >
                         {deliveryMarketArray.map((product) => (
@@ -181,7 +204,6 @@ const AdForm = () => {
                     <Select
                         labelId="demo-multiple-name-label"
                         id="demo-multiple-name"
-                        multiple
                         value={productLine}
                         onChange={handleArrayProductLine}
                         input={<OutlinedInput label="Product Line" />}
@@ -203,11 +225,18 @@ const AdForm = () => {
                     <Select
                         labelId="demo-multiple-name-label"
                         id="demo-multiple-name"
-                        multiple
                         value={taskType}
                         onChange={handleArrayTaskType}
                         input={<OutlinedInput label="Task Type" />}
                         label="Task Type"
+                        MenuProps={{
+                            PaperProps: {
+                              style: {
+                                maxHeight: 130,
+                                width: 250,
+                              },
+                            },
+                        }}
                     >
                         {taskTypeArray.map((product) => (
                             <MenuItem
@@ -219,24 +248,26 @@ const AdForm = () => {
                         ))}
                     </Select>
                 </FormControl>
+                <div className="center">
+                    <input
+                        ref={fileUploadInput}
+                        type="file"
+                        accept="video/mp4"
+                        id="fileUploadInput"
+                        onChange={handleFileChange}
+                        style={{marginTop: '20px', marginBottom: '15px', fontSize: "16px", marginLeft:'9vw'}}
+                    />
+                </div>
 
-                <input
-                    ref={fileUploadInput}
-                    type="file"
-                    accept="video/mp4"
-                    id="fileUploadInput"
-                    onChange={handleFileChange}
-                    style={{marginTop: '20px', marginBottom: '15px'}}
-                />
-
-                <div>
-                    <Button type="submit" variant="contained" color="primary" >
-                    Submit
+                <div className="center">
+                    <Button type="submit" variant="contained" color="primary" sx={{marginBottom:"10px"}}>
+                        Submit
                     </Button>
                 </div>
                 
             </form>
             </Card>
+            </div>
         </div>
 
     );
