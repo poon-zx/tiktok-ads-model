@@ -15,10 +15,18 @@ violation_labels:
     - Alcohol
     - Gambling
 ad_categories:
-    - Counterfeit Goods\nAny content promoting products that mimic the brand features of another in an attempt to pass as genuine
-    - Dangerous Products or Services\nIncluding recreational drugs, psychoactive substances, weapons, ammunition, and explosives
-    - Controlled Substances\nContent that promotes the sale, distribution, or use of tobacco, illegal drugs, narcotics, or excessive alcohol
-    - Weapons or Ammunition\nContent promoting the sale, distribution, or use of firearms, weapons, or explosives
-    - Sexual Content\nGenerally allowed on a limited basis and often subject to age restrictions
-    - Alcohol\nRestricted and subject to age-related regulations
-    - Gambling\nReal money and simulated gambling content may be allowed with specific regulations
+    - Financial Services\nAds related to banking, insurance, loans, and investment opportunities.
+    - Consumer Goods\nAds showcasing everyday products like electronics, apparel, and household items.
+    - Food & Beverages\nAds promoting restaurants, drinks, packaged foods, and culinary experiences.
+    - Automobiles\nAds featuring cars, trucks, motorcycles, and related automotive products or services.
+    - Entertainment & Media\nAds highlighting movies, music, TV shows, books, and other entertainment content.
+    - Travel & Tourism\nAds showcasing travel destinations, hotel deals, flight offers, and tourism activities.
+    - Real Estate\nAds promoting property sales, rentals, housing developments, and real estate services.
+    - E-commerce & Online Services\nAds for online shopping platforms, delivery services, and digital marketplaces.
+    - Health & Wellness\nAds related to fitness, health products, medical services, and wellness practices.
+    - Education & Training\nAds for educational institutions, online courses, and training programs.
+    - Tech & Software\nAds featuring technology gadgets, software solutions, apps, and related services.
+    - Events & Occasions\nAds promoting concerts, festivals, weddings, and other special events.
+    - Home & Garden\nAds for home improvement products, gardening tools, furniture, and décor.
+    - Pets & Animals\nAds related to pet products, animal care, pet adoption, and animal-themed content.
+    - Sports & Outdoors\nAds showcasing sports gear, outdoor adventures, athletic events, and recreation activities.
