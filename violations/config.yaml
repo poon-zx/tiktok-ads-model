@@ -1,0 +1,30 @@
+violation_labels:
+    - Violence
+    - Nudity or Sexual Activity
+    - Hate Speech
+    - Bullying or Harassment
+    - Scam or Fraud
+    - Suicide or Self-Harm
+    - Sale of Illegal/Regulated Goods
+    - Counterfeit Goods
+    - Controlled Substances
+    - Weapons or Ammunition
+    - Sexual Content
+    - Alcohol
+    - Gambling
+ad_categories:
+    - Financial Services\nAds related to banking, insurance, loans, and investment opportunities.
+    - Consumer Goods\nAds showcasing everyday products like electronics, apparel, and household items.
+    - Food & Beverages\nAds promoting restaurants, drinks, packaged foods, and culinary experiences.
+    - Automobiles\nAds featuring cars, trucks, motorcycles, and related automotive products or services.
+    - Entertainment & Media\nAds highlighting movies, music, TV shows, books, and other entertainment content.
+    - Travel & Tourism\nAds showcasing travel destinations, hotel deals, flight offers, and tourism activities.
+    - Real Estate\nAds promoting property sales, rentals, housing developments, and real estate services.
+    - E-commerce & Online Services\nAds for online shopping platforms, delivery services, and digital marketplaces.
+    - Health & Wellness\nAds related to fitness, health products, medical services, and wellness practices.
+    - Education & Training\nAds for educational institutions, online courses, and training programs.
+    - Tech & Software\nAds featuring technology gadgets, software solutions, apps, and related services.
+    - Events & Occasions\nAds promoting concerts, festivals, weddings, and other special events.
+    - Home & Garden\nAds for home improvement products, gardening tools, furniture, and décor.
+    - Pets & Animals\nAds related to pet products, animal care, pet adoption, and animal-themed content.
+    - Sports & Outdoors\nAds showcasing sports gear, outdoor adventures, athletic events, and recreation activities.
