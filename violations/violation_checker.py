@@ -106,8 +106,8 @@ class ViolationChecker:
                 cos_sim = F.cosine_similarity(im.unsqueeze(0), text_features) * 100
                 indiv.append(cos_sim.softmax(dim=0)[0].item())
 
-            avg = sum(indiv) / len(indiv)
-            out[label] = avg
+            highest = max(indiv)
+            out[label] = highest
         return out
 
     def _extract_frames_from_video(self, video_path: str, num_frames: int) -> list:
