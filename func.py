@@ -160,6 +160,7 @@ def analyse_ad(ad_title: str, advertiser_name: str, description: str,
     assigned_moderator = assignments[ad_id]
     mod_data = moderator_data[moderator_data['moderator'] == assigned_moderator].iloc[0]
     increase_in_utilisation = mod_data['handling time'] / (PAID_HOURS_PER_DAY * 60 * 60 * 1000)
+    market = mod_data['market']
 
     result = {
         "baseline_st": baseline_st,
@@ -168,7 +169,8 @@ def analyse_ad(ad_title: str, advertiser_name: str, description: str,
         "normalized_productivity": mod_data['normalized_productivity'],
         "normalized_accuracy": mod_data['normalized_accuracy'],
         "remaining_tasks_today": mod_data['max_tasks_per_day'] - 1,  # Subtracting 1 as we've assigned one ad
-        "increase_in_utilisation": increase_in_utilisation
+        "increase_in_utilisation": increase_in_utilisation,
+        "market": market
     }
 
     return result

@@ -45,7 +45,8 @@ sample_data = {
         "Sports & Outdoors": 0.26188911599404185
     },
     "ad_score_equation": {
-        "score": 0
+        "score": 0,
+        "confidence": 0
     },
     "moderator_matching": {
         "moderator_score": 0.7839359734541377,
