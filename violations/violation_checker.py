@@ -9,7 +9,6 @@ from sentence_transformers import SentenceTransformer
 
 from PIL import Image
 
-
 class ViolationChecker:
 
     def __init__(self, config_path: str, clip_path: str = "openai/clip-vit-base-patch32", sentence_transformer_path: str = "BAAI/bge-base-en"):
