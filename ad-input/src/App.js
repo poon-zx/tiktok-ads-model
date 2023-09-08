@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import AdForm from './form/form.js';
-import Violation from './result/violation.js';
+import Result from './result/result.js';
 import './App.css';
 import { useState } from 'react';
 
@@ -12,7 +12,8 @@ function App() {
     }
     return (
       <div className="App">
-        {data ? <Violation data={data}/> : <AdForm setParentState={updateParentState}/>}
+        <Result data={data}/>
+        {/* {data ? <Violation data={data}/> : <AdForm setParentState={updateParentState}/>} */}
       </div>
   );
 }

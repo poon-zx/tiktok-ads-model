@@ -124,7 +124,7 @@ const AdForm = ({setParentState}) => {
                 <img className="tiktok-logo" src={Tiktok} alt="tiktok-logo" style={{height: '6vh'}}/>
             </div>
             <div className="form-border">
-                <Card variant="outlined" sx = {{borderRadius: '8px'}} className="ad-card">
+                <Card variant="outlined" sx = {{borderRadius: '8px', boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)'}} className="ad-card">
             <h1>Advertisement Form</h1>
             <form 
             onSubmit={handleSubmit}>
