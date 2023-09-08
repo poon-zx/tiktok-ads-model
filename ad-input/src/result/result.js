@@ -93,7 +93,7 @@ const Task = ({data}) => {
     const moderator = data.moderator_matching
     return (
         <Card className="score-card" variant="outlined" sx={{marginTop: '2vh', padding: '10px', marginLeft: '4vw', marginRight: '4vw', borderRadius: '10px', width: '40%'}}>
-            <div>{moderator.remaining_tasks}</div>
+            <div style={{fontSize: '1.4rem'}}>{moderator.remaining_tasks}</div>
             <div>Remaining tasks to be assigned today</div>
         </Card>
     )
@@ -103,7 +103,7 @@ const Utilization = ({data}) => {
     const moderator = data.moderator_matching
     return (
         <Card className="score-card" variant="outlined" sx={{marginTop: '2vh', padding: '10px', marginLeft: '4vw', marginRight: '4vw', borderRadius: '10px', width: '40%'}}>
-            <div>{moderator.utilization}</div>
+            <div style={{fontSize: '1.4rem'}}>{moderator.utilization}</div>
             <div>% increase in Utilization</div>
         </Card>
     )
@@ -124,8 +124,10 @@ const Result = ({data}) => {
             <AdCategory data={data}/>
             <ModeratorMatching data={data}/>
             <ModScore data={data}/>
-            <Task data={data}/>
-            <Utilization data={data}/>
+            <div style={{display:'flex'}}>
+                <Task data={data}/>
+                <Utilization data={data}/>
+            </div>
         </>
     );
 }
