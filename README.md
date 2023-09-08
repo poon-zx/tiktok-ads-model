@@ -4,6 +4,14 @@
 
 1. Install the required dependencies for to run the flask backend.
 
+**Gurobi**
+Installation of Gurobi is required to run our optimization models, you can use pip to install Gurobi into your currently active Python environment
+```bash
+python -m pip install gurobipy
+```
+A license is also required to run Gurobi. Refer to this [link](https://www.gurobi.com/academia/academic-program-and-licenses/) for free Gurobi licenses.
+
+
 2. Install the node packages to run the react frontend.
 ```bash
 npm install
