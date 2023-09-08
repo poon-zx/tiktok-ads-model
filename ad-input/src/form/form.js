@@ -21,7 +21,7 @@ const AdForm = ({setParentState}) => {
     const [selectedFile, setSelectedFile] = useState(null);
     
     const productLineArray = ['Non-Auction Ads', 'Auction Ads', 'RIE', 'Shopping Ads'];
-    const deliveryMarketArray = ['AE', 'AR', 'AT', 'AU', 'BE', 'BH', 'BR', 'BY', 'CH', 'CL', 'CO', 'CZ', 'DE', 'DK', 'EC', 'EG', 'ES', 'FI', 'FR', 'GB', 'GR', 'HU', 'ID', 'IE', 'IL', 'IQ', 'IT', 'JO', 'JP', 'KH', 'KR', 'KW', 'KZ', 'LB', 'MA', 'MENA', 'MX', 'MY', 'NL', 'NO', 'NZ', 'OM', 'PE', 'PH', 'PK', 'PL', 'PT', 'QA', 'RO', 'SE', 'SG', 'TH', 'TR', 'TW', 'US&CA', 'UY', 'VN', 'ZA'];
+    const deliveryMarketArray = ['AE', 'AR', 'AT', 'AU', 'BE', 'BH', 'BR', 'BY', 'CA','CH', 'CL', 'CO', 'CZ', 'DE', 'DK', 'EC', 'EG', 'ES', 'FI', 'FR', 'GB', 'GR', 'HU', 'ID', 'IE', 'IL', 'IQ', 'IT', 'JO', 'JP', 'KH', 'KR', 'KW', 'KZ', 'LB', 'MA', 'MX', 'MY', 'NL', 'NO', 'NZ', 'OM', 'PE', 'PH', 'PK', 'PL', 'PT', 'QA', 'RO', 'SA', 'SE', 'SG', 'TH', 'TR', 'TW', 'US', 'UY', 'VN', 'ZA'];
     const taskTypeArray = ['auction_relation', 'Ad Group Recall (Merged)', 'auction_all',
     'Promote', 'Promote Report Recall', 'R&F', 'Branding Ads',
     'Shopping Ad Group', 'Auction Ad Group'];
@@ -87,7 +87,6 @@ const AdForm = ({setParentState}) => {
 
         const handleSubmit = (e) => {
             e.preventDefault();
-            
             const DEFAULT_FILE_NAME = 'videoFile';
             const FILE_UPLOAD_ENDPOINT = 'http://127.0.0.1:5000/upload';
             const headers = {
@@ -119,13 +118,18 @@ const AdForm = ({setParentState}) => {
         };          
 
     return (
-        <div>
-            <div className="tiktok-box">
-                <img className="tiktok-logo" src={Tiktok} alt="tiktok-logo" style={{height: '6vh'}}/>
-            </div>
+        <div style={{margin: '0 0 40px'}}>
             <div className="form-border">
-                <Card variant="outlined" sx = {{borderRadius: '8px', boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)'}} className="ad-card">
-            <h1>Advertisement Form</h1>
+                <Card variant="outlined" className="ad-card" 
+                    sx={{
+                    marginTop: '50px',
+                    borderRadius: '8px', 
+                    boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
+                    }} 
+                    >
+            <div className="tiktok-box">
+                <img className="tiktok-logo" src={Tiktok} alt="tiktok-logo" style={{height: '80px', padding: '20px 0'}}/>
+            </div>
             <form 
             onSubmit={handleSubmit}>
                 <TextField

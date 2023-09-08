@@ -12,12 +12,12 @@
 .progress {
     margin: 20px 0;
     width: 100%;
-    background-color: #cacaca;
+    background-color: #69C9D0;
     border-radius: 10px;
 }
 
 .progress-bar {
     width: 0;
-    background-color: #6c93e3;
+    background-color: #EE1D52;
     transition: width 1s cubic-bezier(0.2, 1.07, 0.56, 0.97);
 }

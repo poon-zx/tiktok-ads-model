@@ -1,6 +1,7 @@
 import react, {useEffect, useRef} from 'react';
 import { Card } from '@mui/material';
 import "./result.css"
+import score from "../score.png"
 
 const roundTo2dp = (string) => {
     return (parseFloat(string) * 100).toFixed(2)
@@ -56,18 +57,33 @@ const AdScoringSystem = ({data}) => {
 
 const AdScoringValue = ({data}) => {
     return (
-        <div style={{display:'flex', justifyContent:'center'}}>
+        <div style={{display:'flex', justifyContent:'space-between', margin: '0 15vw'}}>
+        <Card className="score-card" variant="outlined"
+            sx={{
+                width: '45%',
+                marginTop: '20px', 
+                padding: '20px',
+                borderRadius: '10px',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center'
+                }}>
+            <div style={{textAlign: 'center'}}>
+                <img src={score} alt="score" style={{height: '80px'}}/>
+                <div style={{fontSize: '1.3rem', fontWeight: '600'}}>ad_score : {data.ad_score_equation.score}</div>
+            </div>
+        </Card>
         <Card className="score-card" variant="outlined" 
             sx={{
-                width: '20%',
+                width: '45%',
                 marginTop: '20px', 
                 padding: '20px',
                 borderRadius: '10px',
                 display: 'flex',
                 justifyContent: 'center', 
+                alignItems: 'center'
                 }}>
-            <div style={{textAlign: 'left'}}>
-                <div style={{fontSize: '1.3rem', fontWeight: '600'}}>ad_score       : {data.ad_score_equation.score}</div>
+            <div style={{textAlign: 'left', fontWeight: '500'}}>
                 <div>avg_ad_revenue : 23.89</div>
                 <div>baseline_st    : {data.ad_score_equation.baseline_st}</div>
                 <div>days_diff      : {data.ad_score_equation.days_diff}</div>
@@ -91,7 +107,7 @@ const ViolationType = ({data}) => {
                     }}>
                     {violations ? Object.keys(violations).map((key) => (
                         <>
-                        <div key={key} >{key} : {roundTo2dp(violations[key])}</div>
+                        <div key={key} >{key} : {roundTo2dp(violations[key])}%</div>
                         <ProgressBar width={`${violations[key] * 100}%`} color={"#6f8ecd"}></ProgressBar>
                         </>
                     )) :
@@ -117,7 +133,7 @@ const AdCategory = ({data}) => {
                 >
                     {Object.keys(categories).map((key) => (
                         <>
-                        <div key={key} >{key} : {roundTo2dp(categories[key])}</div>
+                        <div key={key} >{key} : {roundTo2dp(categories[key])}%</div>
                         <ProgressBar width={`${categories[key] * 100}%`} color={"#6f8ecd"}></ProgressBar>
                         </>
                     ))}
@@ -179,11 +195,11 @@ const ModScore = ({data}) => {
                 justifyContent: 'center', 
                 }}>
             <div style={{textAlign: 'left', width: '90%'}}>
-                <div>mod_score      : {moderator_score}</div>
+                <div>mod_score      : {moderator_score}%</div>
                 <ProgressBar width={`${moderator_score}%`} color={"#6f8ecd"}></ProgressBar>
-                <div>productivity   : {productivity}</div>
+                <div>productivity   : {productivity}%</div>
                 <ProgressBar width={`${productivity}%`} color={"#6f8ecd"}></ProgressBar>
-                <div>accuracy       : {accuracy}</div>
+                <div>accuracy       : {accuracy}%</div>
                 <ProgressBar width={`${accuracy}%`} color={"#6f8ecd"}></ProgressBar>
             </div>
         </Card>
