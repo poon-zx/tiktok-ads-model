@@ -1,0 +1,35 @@
+.ad-card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px 0 rgba(0,0,0,.1);
+    margin-bottom: 3vh;
+    margin-top: 2.5vh;
+    padding: 5px;
+    position: relative;
+    width: 75%;
+
+}
+
+.ad-card.card {
+    background-color: none;
+}
+
+.form-border {
+    display: flex;
+    justify-content: center;
+  }
+
+  .center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .tiktok-box {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2vh;
+  }

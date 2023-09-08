@@ -1,0 +1,50 @@
+{
+    "video_violation": {
+        "Violence": 0.2313412085175514,
+        "Nudity or Sexual Activity": 0.18042190819978715,
+        "Hate Speech": 0.2057467833161354,
+        "Bullying or Harassment": 0.20117659717798234,
+        "Scam or Fraud": 0.18724700510501863,
+        "Suicide or Self-Harm": 0.1926332324743271,
+        "Sale of Illegal/Regulated Goods": 0.18096445202827455,
+        "Counterfeit Goods": 0.16708229929208757,
+        "Controlled Substances": 0.15342690646648408,
+        "Weapons or Ammunition": 0.24873889684677125,
+        "Sexual Content": 0.1868179738521576,
+        "Alcohol": 0.16104911565780639,
+        "Gambling": 0.18248966932296753
+    },
+    "ad_category": {
+        "Financial Services": 0.6193647734266479,
+        "Consumer Goods": 0.47762112417407576,
+        "Food & Beverages": 0.5787563024322729,
+        "Automobiles": 0.877835291053938,
+        "Entertainment & Media": 0.016401770806587224,
+        "Travel & Tourism": 0.034172944331359534,
+        "Real Estate": 0.15442423819858941,
+        "E-commerce & Online Services": 0.5395460295800252,
+        "Health & Wellness": 0.18489376778716315,
+        "Education & Training": 0.4840913998947366,
+        "Tech & Software": 0.7807660691493897,
+        "Events & Occasions": 0.5822961067434335,
+        "Home & Garden": 0.05711569929769911,
+        "Pets & Animals": 0.6982649603016671,
+        "Sports & Outdoors": 0.26188911599404185
+    },
+    "ad_score_equation": {
+        "score": 0,
+        "baseline_st": 0.5,
+        "days_diff": 0.5,
+        "confidence": 0
+    },
+    "moderator_matching": {
+        "moderator_id":1823,
+        "moderator_score": 0.7839359734541377,
+        "productivity": 0.7839359734541377,
+        "accuracy": 0.13123,
+        "remaining_tasks": 8,
+        "market": "market",
+        "expertise": "expertise",
+        "utilization": 47.77747699078465
+    }
+}
