@@ -198,3 +198,9 @@ def calculate_confidence(A):
     else:
         return None
 
+def get_top_violations(d):
+    top_3_dict = {}
+    sorted_violations = sorted(d, key=d.get, reverse=True)[:3]
+    top_3_dict = {violation: d[violation] for violation in sorted_violations if d[violation] >= 0.6}
+    return top_3_dict
+    
