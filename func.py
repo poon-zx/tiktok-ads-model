@@ -7,20 +7,6 @@ from datetime import datetime
 from gurobipy import Model, GRB
 import uuid
 
-# Load the st_combinations file into a DataFrame
-df = pd.read_excel("./EDA/Datasets/st_combinations.xlsx")
-
-# Load the moderator data
-moderator_data = pd.read_excel("./Scoring/moderator_scored.xlsx")
-
-# Convert the DataFrame to a dictionary using the three specified columns as a key
-st_dict = {}
-
-for index, row in df.iterrows():
-    key = (row['delivery_country'], row['product_line'], row['task_type_en'])
-    value = row['baseline_st']
-    st_dict[key] = value
-
 
 def extract_frames_from_video(file_storage: FileStorage, num_frames: int) -> list:
     """
@@ -62,14 +48,29 @@ def extract_frames_from_video(file_storage: FileStorage, num_frames: int) -> lis
 
 def analyse_ad(ad_title: str, advertiser_name: str, description: str,
                delivery_market: str, product_line: str, task_type: str,
-               date: str, video_file: FileStorage) -> dict:
+               date: str, video_file: FileStorage, confidence) -> dict:
+
+    # Load the st_combinations file into a DataFrame
+    df = pd.read_excel("./EDA/Datasets/st_combinations.xlsx")
+
+    # Load the moderator data
+    moderator_data = pd.read_excel("./Scoring/moderator_scored.xlsx")
+
+    # Convert the DataFrame to a dictionary using the three specified columns as a key
+    st_dict = {}
+
+    for index, row in df.iterrows():
+        key = (row['delivery_country'], row['product_line'], row['task_type_en'])
+        value = row['baseline_st']
+        st_dict[key] = value
+
     # Obtain baseline_st
-    baseline_st = st_dict.get((delivery_country, product_line, task_type_en), None)
+    baseline_st = st_dict.get((delivery_market, product_line, task_type), 1.20)
 
     # Obtain days_diff
     given_date = datetime.strptime(date, '%d/%m/%Y')
     target_date = datetime.strptime("9/9/2023", '%d/%m/%Y')
-    delta = target_date - given_date
+    delta = given_date - target_date
     days_diff = delta.days
 
     # Min-max normalization for baseline_st
@@ -83,7 +84,9 @@ def analyse_ad(ad_title: str, advertiser_name: str, description: str,
     normalized_days_diff = (days_diff - min_days_diff) / (max_days_diff - min_days_diff)
     
     # Compute the average of the two normalized values
-    ad_score = (normalized_baseline_st + normalized_days_diff) / 2
+    ad_score = round(abs((normalized_baseline_st - normalized_days_diff) / 2), 3)
+
+    print(ad_score)
 
     # Generate ad_id
     ad_id = str(uuid.uuid4())
@@ -100,7 +103,8 @@ def analyse_ad(ad_title: str, advertiser_name: str, description: str,
         'date': [date],
         'baseline_st': [baseline_st],
         'days_diff': [days_diff],
-        'ad_score': [ad_score]
+        'ad_score': [ad_score],
+        'confidence': [confidence]
     })
 
     # Initialize the Gurobi model
@@ -115,6 +119,11 @@ def analyse_ad(ad_title: str, advertiser_name: str, description: str,
     m.setObjective(sum(x[ad_row['ad_id'], mod_row['moderator']] * abs(0.5 * (ad_row['ad_score'] - mod_row['moderator_score']) + 
         0.5 * (ad_row['confidence'] - mod_row['normalized_productivity'] + mod_row['normalized_accuracy'])) 
                     for _, ad_row in ads_dataset.iterrows() for _, mod_row in moderator_data.iterrows()), GRB.MINIMIZE)
+
+    # Each ad should be allocated to only one moderator
+    for _, ad_row in ads_dataset.iterrows():
+        ad_id = ad_row['ad_id']
+        m.addConstr(sum(x[ad_id, mod_row['moderator']] for _, mod_row in moderator_data.iterrows()) == 1)
 
     # The total tasks assigned to a moderator should not exceed their max tasks per day
     for _, mod_row in moderator_data.iterrows():
@@ -136,23 +145,29 @@ def analyse_ad(ad_title: str, advertiser_name: str, description: str,
     # Check the moderator constraint more efficiently
     for _, ad_row in ads_dataset.iterrows():
         ad_id = ad_row['ad_id']
-        ad_market = ad_row['queue_market']
+        ad_market = ad_row['delivery_market']
         
         # Get the list of moderators that match the ad's market from the preprocessed dictionary
         matching_mods = moderator_market_dict.get(ad_market, [])
-        
-        for mod in matching_mods:
-            m.addConstr(x[ad_id, mod] == 0)
+
+        # Get all the moderators
+        all_mods = moderator_data['moderator'].tolist()
+
+        # For each moderator, if they are not in the matching moderators list, 
+        # set their assignment variable for the current ad to 0.
+        for mod in all_mods:
+            if mod not in matching_mods:
+                m.addConstr(x[ad_id, mod] == 0)
 
     # Solve the model
     m.optimize()
 
     # Extract the assignments from the solution
     assignments = {}
-    for ad in sample_ads_50:
+    for _, ad_row in ads_dataset.iterrows():
         for _, mod_row in moderator_data.iterrows():
-            if x[ad['ad_id'], mod_row['moderator']].x > 0.5:  # If this ad is assigned to this moderator
-                assignments[ad['ad_id']] = mod_row['moderator']
+            if x[ad_row['ad_id'], mod_row['moderator']].x > 0.5:  # If this ad is assigned to this moderator
+                assignments[ad_row['ad_id']] = mod_row['moderator']
 
     PAID_HOURS_PER_DAY = 8
 
@@ -161,6 +176,8 @@ def analyse_ad(ad_title: str, advertiser_name: str, description: str,
     mod_data = moderator_data[moderator_data['moderator'] == assigned_moderator].iloc[0]
     increase_in_utilisation = mod_data['handling time'] / (PAID_HOURS_PER_DAY * 60 * 60 * 1000)
     market = mod_data['market']
+    mod_score = mod_data['moderator_score']
+    new_utilisation = mod_data["Utilisation %"] + increase_in_utilisation
 
     result = {
         "baseline_st": baseline_st,
@@ -168,9 +185,12 @@ def analyse_ad(ad_title: str, advertiser_name: str, description: str,
         "assigned_moderator": assigned_moderator,
         "normalized_productivity": mod_data['normalized_productivity'],
         "normalized_accuracy": mod_data['normalized_accuracy'],
-        "remaining_tasks_today": mod_data['max_tasks_per_day'] - 1,  # Subtracting 1 as we've assigned one ad
+        "remaining_tasks_today": round(mod_data['max_tasks_per_day'] - 1, 2),  # Subtracting 1 as we've assigned one ad
         "increase_in_utilisation": increase_in_utilisation,
-        "market": market
+        "market": market,
+        "days_diff": days_diff,
+        "mod_score": mod_score,
+        "new_utilisation": new_utilisation
     }
 
     return result
@@ -198,3 +218,16 @@ def calculate_confidence(A):
     else:
         return None
 
+def top_category(data):
+    # Extract the ad_category dictionary
+    ad_category = data["ad_category"]
+
+    # Find the key (category) with the maximum score
+    top_category = max(ad_category, key=ad_category.get)
+    highest_score = ad_category[top_category]
+
+    # Update the ad_category dictionary to only have the top category and its score
+    top_category = top_category.split("\\n")[0]
+    data["ad_category"] = {top_category: highest_score}
+    print(data)
+    return data

@@ -79,7 +79,7 @@ const AdScoringValue = ({data}) => {
 }
 
 const ViolationType = ({data}) => {
-    const violations = data.video_violation
+    const violations = data.violation_labels
     return (
         <>
             <div style={{textAlign: 'center', width: '45%'}}>
@@ -220,7 +220,7 @@ const Utilization = ({data}) => {
 const Result = ({data}) => {
     useEffect(() => {
         console.log("data video violation: " )
-        console.log("this is the output" + data.video_violation.Violence);
+        console.log("this is the output" + data.violation_labels.Violence);
     }, [data]);
 
     return (
