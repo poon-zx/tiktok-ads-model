@@ -5,6 +5,7 @@
 1. Install the required dependencies for to run the flask backend.
 
 **Gurobi**
+
 Installation of Gurobi is required to run our optimization models, you can use pip to install Gurobi into your currently active Python environment
 ```bash
 python -m pip install gurobipy
