@@ -2,8 +2,10 @@ import json
 import os
 from flask import Flask, request, render_template
 from flask_cors import CORS, cross_origin
-from func import extract_frames_from_video
+from func import extract_frames_from_video, analyse_ad
 from werkzeug.datastructures import FileStorage
+
+from violations.violation_checker import ViolationChecker
 
 DEFAULT_FILE_NAME = "videoFile"
 
@@ -67,8 +69,7 @@ def home():
 @cross_origin(options=None)
 def upload():
     if request.method == "POST":
-        file = request.files
-        # file = request.files.get(DEFAULT_FILE_NAME)
+        file = request.files.get(DEFAULT_FILE_NAME)
         data = request.form
         ad_title = data.get('adTitle')
         advertiser_name = data.get('advertiserName')
@@ -78,8 +79,12 @@ def upload():
         task_type = data.get('taskType')
         date = data.get('startDate')
         print(file)
-        print(data)
+        # print(data)
         # print(extract_frames_from_video(file, 10))
+
+        checker = ViolationChecker(config_path = 'violations/config.yaml')
+        out = checker.get_results(ad_description = description, file_storage = file)
+
     return json.dumps(sample_data)
     return "post method only please"
 
