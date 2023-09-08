@@ -89,7 +89,7 @@ const AdForm = ({setParentState}) => {
             e.preventDefault();
             
             const DEFAULT_FILE_NAME = 'videoFile';
-            const FILE_UPLOAD_ENDPOINT = 'https://dd88-137-132-26-104.ngrok-free.app/upload';
+            const FILE_UPLOAD_ENDPOINT = 'http://127.0.0.1:5000/upload';
             const headers = {
                 'Content-Type': 'multipart/form-data',
               };

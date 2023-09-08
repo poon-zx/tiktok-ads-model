@@ -1,5 +1,6 @@
 import cv2
 import torch
+import tempfile
 import yaml
 import torch.nn.functional as F
 import numpy as np
@@ -8,6 +9,7 @@ from transformers import AutoProcessor, CLIPModel, AutoTokenizer
 from sentence_transformers import SentenceTransformer
 
 from PIL import Image
+from werkzeug.datastructures import FileStorage
 
 class ViolationChecker:
 
@@ -22,7 +24,6 @@ class ViolationChecker:
         """
 
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
-
         with open(config_path) as f:
             self.config = yaml.load(f, Loader=yaml.FullLoader)
         self.violation_labels = self.config['violation_labels']
@@ -34,7 +35,7 @@ class ViolationChecker:
 
         self.sentence_transformer = SentenceTransformer(sentence_transformer_path)
 
-    def get_results(self, ad_description: str, video_path: str, num_frames: int = 10) -> dict:
+    def get_results(self, ad_description: str, file_storage: FileStorage, num_frames: int = 10) -> dict:
         
         """
         Get the violation labels and ad categories for the video
@@ -45,19 +46,19 @@ class ViolationChecker:
         :return: dictionary of violation labels and their probabilities
         """
 
-        return self(ad_description = ad_description, video_path = video_path)
+        return self(ad_description = ad_description, file_storage = file_storage, num_frames = num_frames)
 
-    def __call__(self, ad_description: str, video_path: str, num_frames: int = 10) -> dict:
+    def __call__(self, ad_description: str, file_storage: FileStorage, num_frames: int = 10) -> dict:
         """
         Get the violation labels and ad categories for the video
 
         :param ad_description: description of the ad
-        :param video_path: path to the video file
+        :param file_storage: the file storage 
         :param num_frames: number of frames to extract from the video (default: 10)
         :return: dictionary of violation labels and their probabilities
         """
 
-        violation_labels = self.get_violation_labels(video_path = video_path, num_frames = num_frames)
+        violation_labels = self.get_violation_labels(file_storage = file_storage, num_frames = num_frames)
         ad_category = self.get_ad_category(ad_description = ad_description)
 
         return {
@@ -80,16 +81,16 @@ class ViolationChecker:
         cos_sim = F.cosine_similarity(query, categories)
         return dict(zip(self.ad_categories, cos_sim.tolist()))
 
-    def get_violation_labels(self, video_path: str, num_frames: int = 10) -> dict:
+    def get_violation_labels(self, file_storage: FileStorage, num_frames: int = 10) -> dict:
         """
         Get the violation labels for the video
 
-        :param video_path: path to the video file
+        :param file_storage: the file storage object
         :param num_frames: number of frames to extract from the video (default: 10)
         :return: dictionary of violation labels and their probabilities
         """
 
-        frames = self._extract_frames_from_video(video_path, num_frames)
+        frames = self._extract_frames_from_video(file_storage, num_frames)
 
         img_inputs = self.clip_processor(images = frames, return_tensors="pt")
         img_inputs = {k: v.to(self.device) for k, v in img_inputs.items()}
@@ -109,40 +110,43 @@ class ViolationChecker:
             out[label] = highest
         return out
 
-    def _extract_frames_from_video(self, video_path: str, num_frames: int) -> list:
+    def _extract_frames_from_video(self, file_storage: FileStorage, num_frames: int) -> list:
         """
         Extract frames from the video
 
-        :param video_path: path to the video file
+        :param file_storage: video file
         :param num_frames: number of frames to extract from the video
         :return: list of PIL images
         """
         frames = []
-        
-        cap = cv2.VideoCapture(video_path)
-        
-        if not cap.isOpened():
-            raise Exception("Error: Could not open video file.")
-        total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-        
-        frame_interval = int(total_frames / num_frames)
 
-        frame_count = 0
-        while True:
-            ret, frame = cap.read()
+        with tempfile.NamedTemporaryFile(suffix='.mp4') as temp_file:
+            temp_file.write(file_storage.read())
+            video_path = temp_file.name
 
-            if (not ret) or (frame is None) or (len(frames) >= num_frames):
-                break
+            cap = cv2.VideoCapture(video_path)
+            if not cap.isOpened():
+                raise Exception("Error: Could not open video file.")
+            total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 
-            if frame_count % frame_interval == 0:
-                pil_frame = Image.fromarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
-                frames.append(pil_frame)
-            
-            frame_count += 1
-            
-        cap.release()
-        
-        return frames
+            frame_interval = int(total_frames / num_frames)
+
+            frame_count = 0
+            while True:
+                ret, frame = cap.read()
+
+                if (not ret) or (frame is None) or (len(frames) >= num_frames):
+                    break
+
+                if frame_count % frame_interval == 0:
+                    pil_frame = Image.fromarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
+                    frames.append(pil_frame)
+
+                frame_count += 1
+
+            cap.release()
+
+            return frames
 
 
 if __name__ == "__main__":
@@ -153,11 +157,11 @@ a detachable magazine, and a built-in optical scope for improved accuracy. Known
 the SAR 21 is utilized by the Singapore Armed Forces and other military and law enforcement units worldwide.
 """
 
-checker = ViolationChecker(config_path = 'config.yaml')
-out = checker.get_results(ad_description = ad_description, video_path = "test.mp4")
+    checker = ViolationChecker(config_path = 'config.yaml')
+    out = checker.get_results(ad_description = ad_description, video_path = "test.mp4")
 
 
-print(out)
+    print(out)
 # {'violation_labels': {'Violence': 0.759814453125,
 #   'Nudity or Sexual Activity': 0.0839385986328125,
 #   'Hate Speech': 0.377484130859375,
