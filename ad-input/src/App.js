@@ -12,8 +12,7 @@ function App() {
     }
     return (
       <div className="App">
-        <Result data={data}/>
-        {/* {data ? <Violation data={data}/> : <AdForm setParentState={updateParentState}/>} */}
+        {data ? <Result data={data}/> : <AdForm setParentState={updateParentState}/>}
       </div>
   );
 }

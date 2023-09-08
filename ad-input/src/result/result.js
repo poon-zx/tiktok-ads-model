@@ -35,14 +35,16 @@ const ViolationType = ({data}) => {
     const violations = data.video_violation
     return (
         <>
-            <h2>Violation Type</h2>
-            <Card className="score-card" variant="outlined" sx={{padding: '20px', marginLeft: '4vw', marginRight: '4vw', borderRadius: '10px'}}>
-                {violations ? Object.keys(violations).map((key) => (
-                    <div key={key} >{key} : {violations[key]}</div>
-                )) :
-                    <div>No Violations Found</div>
-                }
-            </Card>
+            <div style={{ textAlign: 'center', margin: '0 4vw' }}>
+                <h2>Violation Type</h2>
+                <Card className="score-card" variant="outlined" sx={{padding: '20px', marginLeft: '4vw', marginRight: '4vw', borderRadius: '10px'}}>
+                    {violations ? Object.keys(violations).map((key) => (
+                        <div key={key} >{key} : {violations[key]}</div>
+                    )) :
+                        <div>No Violations Found</div>
+                    }
+                </Card>
+            </div>
         </>
     )
 };
@@ -51,12 +53,14 @@ const AdCategory = ({data}) => {
     const categories = data.ad_category
     return (
         <>
-            <h2>Ad Category</h2>
-            <Card className="score-card" variant="outlined" sx={{padding: '20px', marginLeft: '4vw', marginRight: '4vw', borderRadius: '10px'}}>
-                {Object.keys(categories).map((key) => (
-                    <div key={key} >{key} : {categories[key]}</div>
-                ))}
-            </Card>
+            <div style={{ textAlign: 'center', margin: '0 4vw' }}>
+                <h2>Ad Category</h2>
+                <Card className="score-card" variant="outlined" sx={{padding: '20px', marginLeft: '4vw', marginRight: '4vw', borderRadius: '10px'}}>
+                    {Object.keys(categories).map((key) => (
+                        <div key={key} >{key} : {categories[key]}</div>
+                    ))}
+                </Card>
+            </div>
         </>
     )
 };
@@ -92,7 +96,7 @@ const ModScore = ({data}) => {
 const Task = ({data}) => {
     const moderator = data.moderator_matching
     return (
-        <Card className="score-card" variant="outlined" sx={{marginTop: '2vh', padding: '10px', marginLeft: '4vw', marginRight: '4vw', borderRadius: '10px', width: '40%'}}>
+        <Card className="score-card" variant="outlined" sx={{marginTop: '2vh', padding: '10px', marginLeft: '4vw', marginRight: '1vw', borderRadius: '10px', width: '40%'}}>
             <div style={{fontSize: '1.4rem'}}>{moderator.remaining_tasks}</div>
             <div>Remaining tasks to be assigned today</div>
         </Card>
@@ -102,7 +106,7 @@ const Task = ({data}) => {
 const Utilization = ({data}) => {
     const moderator = data.moderator_matching
     return (
-        <Card className="score-card" variant="outlined" sx={{marginTop: '2vh', padding: '10px', marginLeft: '4vw', marginRight: '4vw', borderRadius: '10px', width: '40%'}}>
+        <Card className="score-card" variant="outlined" sx={{marginTop: '2vh', padding: '10px', marginLeft: '1vw', marginRight: '4vw', borderRadius: '10px', width: '40%'}}>
             <div style={{fontSize: '1.4rem'}}>{moderator.utilization}</div>
             <div>% increase in Utilization</div>
         </Card>
@@ -120,11 +124,13 @@ const Result = ({data}) => {
         <>
             <AdScoringSystem data={data}/>
             <AdScoringValue data={data}/>
-            <ViolationType data={data}/>
-            <AdCategory data={data}/>
+            <div style={{display:'flex', justifyContent:'center'}}>
+                <ViolationType data={data}/>
+                <AdCategory data={data}/>
+            </div>
             <ModeratorMatching data={data}/>
             <ModScore data={data}/>
-            <div style={{display:'flex'}}>
+            <div style={{display:'flex', justifyContent:'center'}}>
                 <Task data={data}/>
                 <Utilization data={data}/>
             </div>
