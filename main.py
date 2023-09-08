@@ -2,7 +2,7 @@ import json
 import os
 from flask import Flask, request, render_template
 from flask_cors import CORS, cross_origin
-from func import extract_frames_from_video, analyse_ad
+from func import extract_frames_from_video, analyse_ad, calculate_confidence, top_category
 from werkzeug.datastructures import FileStorage
 
 from violations.violation_checker import ViolationChecker
@@ -85,7 +85,36 @@ def upload():
         checker = ViolationChecker(config_path = 'violations/config.yaml')
         out = checker.get_results(ad_description = description, file_storage = file)
 
-    return json.dumps(sample_data)
+        video_violation_values = list(out["violation_labels"].values())
+        confidence = round(calculate_confidence(video_violation_values), 3)
+
+        ad_results = analyse_ad(ad_title, advertiser_name, description, delivery_market, product_line, task_type, date, file, confidence)
+        
+        out = top_category(out)
+
+    json_data = {
+        "ad_score_equation": {
+        "score": ad_results["ad_score"],
+        "baseline_st": ad_results["baseline_st"],
+        "days_diff": ad_results["days_diff"],
+        "confidence": confidence
+    },
+    "moderator_matching": {
+        "moderator_id": ad_results["assigned_moderator"],
+        "moderator_score": ad_results["mod_score"],
+        "productivity": ad_results["normalized_productivity"],
+        "accuracy": ad_results["normalized_accuracy"],
+        "remaining_tasks": ad_results["remaining_tasks_today"],
+        "market": ad_results["market"],
+        "expertise": "No Data",
+        "utilization": ad_results["new_utilisation"]
+    }
+    }
+
+    result_json = out | json_data
+    print(result_json)
+
+    return json.dumps(result_json)
     return "post method only please"
 
 
