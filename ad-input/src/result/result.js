@@ -91,7 +91,7 @@ const ViolationType = ({data}) => {
                     }}>
                     {violations ? Object.keys(violations).map((key) => (
                         <>
-                        <div key={key} >{key} : {roundTo2dp(violations[key])}</div>
+                        <div key={key} >{key} : {roundTo2dp(violations[key])}%</div>
                         <ProgressBar width={`${violations[key] * 100}%`} color={"#6f8ecd"}></ProgressBar>
                         </>
                     )) :
@@ -117,7 +117,7 @@ const AdCategory = ({data}) => {
                 >
                     {Object.keys(categories).map((key) => (
                         <>
-                        <div key={key} >{key} : {roundTo2dp(categories[key])}</div>
+                        <div key={key} >{key} : {roundTo2dp(categories[key])}%</div>
                         <ProgressBar width={`${categories[key] * 100}%`} color={"#6f8ecd"}></ProgressBar>
                         </>
                     ))}
@@ -179,11 +179,11 @@ const ModScore = ({data}) => {
                 justifyContent: 'center', 
                 }}>
             <div style={{textAlign: 'left', width: '90%'}}>
-                <div>mod_score      : {moderator_score}</div>
+                <div>mod_score      : {moderator_score}%</div>
                 <ProgressBar width={`${moderator_score}%`} color={"#6f8ecd"}></ProgressBar>
-                <div>productivity   : {productivity}</div>
+                <div>productivity   : {productivity}%</div>
                 <ProgressBar width={`${productivity}%`} color={"#6f8ecd"}></ProgressBar>
-                <div>accuracy       : {accuracy}</div>
+                <div>accuracy       : {accuracy}%</div>
                 <ProgressBar width={`${accuracy}%`} color={"#6f8ecd"}></ProgressBar>
             </div>
         </Card>
