@@ -185,7 +185,7 @@ def analyse_ad(ad_title: str, advertiser_name: str, description: str,
         "assigned_moderator": assigned_moderator,
         "normalized_productivity": mod_data['normalized_productivity'],
         "normalized_accuracy": mod_data['normalized_accuracy'],
-        "remaining_tasks_today": round(mod_data['max_tasks_per_day'] - 1, 2),  # Subtracting 1 as we've assigned one ad
+        "remaining_tasks_today": round(mod_data['max_tasks_per_day'] - 1, 0),  # Subtracting 1 as we've assigned one ad
         "increase_in_utilisation": increase_in_utilisation,
         "market": market,
         "days_diff": days_diff,
