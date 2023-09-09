@@ -2,7 +2,7 @@ import json
 import os
 from flask import Flask, request, render_template
 from flask_cors import CORS, cross_origin
-from func import extract_frames_from_video, analyse_ad, calculate_confidence, top_category
+from func import extract_frames_from_video, analyse_ad, calculate_confidence, top_category, get_top_violations
 from werkzeug.datastructures import FileStorage
 
 from violations.violation_checker import ViolationChecker
@@ -111,12 +111,13 @@ def upload():
     }
     }
 
+    out["violation_labels"] = get_top_violations(out["violation_labels"])
+
     result_json = out | json_data
     print(result_json)
 
     return json.dumps(result_json)
     return "post method only please"
-
 
 if __name__ == "__main__":
     app.run(debug=True)
