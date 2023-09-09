@@ -68,3 +68,12 @@ Our system consists of three main components: the Advertisement Scoring System, 
 - SentenceTransformers
 - React (Front-end)
 - Flask (Back-end)
+
+## Github Guide
+Below are the folders/files in our Github repository that our various components are located:
+- Exploratory Data Analysis Notebooks and files can be found in folder "EDA"
+- Ad and Moderator Scoring code and result datasets are found in folder "Scoring"
+- CLIP and SentenceTransformers models are found in `violation_checker.py` in folder "violations"
+- Moderator Queuing System and Optimization model found in `moderator-queue.ipynb`
+- React front-end found in folder "ad-input"
+- Flask backend in `main.py`
