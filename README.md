@@ -2,7 +2,10 @@
 
 ## Getting Started
 
-1. Install the required dependencies for to run the flask backend.
+1. Install the required python dependencies
+```bash 
+python -m pip install -r requirements.txt
+```
 
 **Gurobi**
 
@@ -24,6 +27,7 @@ py main.py
 ```
 4. Run the react frontend in /ad-input
 ```bash
+cd ad-input
 npm start
 ```
 

@@ -1,0 +1,12 @@
+Flask==2.2.2
+flask_cors==4.0.0
+gurobipy==10.0.2
+numpy==1.23.5
+opencv_python==4.6.0.66
+pandas==1.5.2
+Pillow==10.0.0
+PyYAML==6.0.1
+sentence_transformers==2.2.2
+torch==1.13.1
+transformers==4.26.1
+Werkzeug==2.2.2
