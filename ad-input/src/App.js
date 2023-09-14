@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import AdForm from './form/form.js';
 import Result from './result/result.js';
 import './App.css';
@@ -18,7 +18,6 @@ function App() {
             {data ? <Route path="/result" element={<Result formData={data}/>}/> : null}
           </Routes>
         </Router>
-        {/* {data ? <Result data={data}/> : <AdForm setParentState={updateParentState}/>} */}
       </div>
   );
 }

@@ -1,8 +1,7 @@
-import react, {useEffect, useRef, useState} from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Card } from '@mui/material';
 import "./result.css"
-import score from "../score.png"
-import score2 from "../score_v2.png"
+import score from "../score_v2.png"
 import needle from "../needle-pointer.png"
 import axios from 'axios';
 
@@ -66,7 +65,6 @@ const AdScoringValue = ({data}) => {
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
               entry.target.style.transform = `translate(-139.5px, 3.3px) rotate(${deg}deg)`
-              // entry.target.style.backgroundColor = color
               observer.unobserve(entry.target)
             }
           })
@@ -95,7 +93,7 @@ const AdScoringValue = ({data}) => {
             <div style={{textAlign: 'center'}}>
                 <div style={{
                 }}>
-                    <img src={score2} alt="score" style={{height: '80px'}}/>
+                    <img src={score} alt="score" style={{height: '80px'}}/>
                     <img ref={needleRef} src={needle} alt="needle" className='needle'/>
                 </div>
                 <div style={{fontSize: '1.3rem', fontWeight: '600'}}>ad_score : {data.ad_score_equation.score}</div>
@@ -305,7 +303,7 @@ const Result = ({formData}) => {
         };
         const callAPI = async () => {
             try {
-                await new Promise((resolve) => setTimeout(resolve, 2000)); // Wait for 2 seconds
+                // await new Promise((resolve) => setTimeout(resolve, 2000)); // Wait for 2 seconds
                 const response = await axios.post(FILE_UPLOAD_ENDPOINT, formData, { headers });
                 console.log(`Data: ${response.data}`)
                 setData(response.data);
