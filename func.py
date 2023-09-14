@@ -69,7 +69,7 @@ def analyse_ad(ad_title: str, advertiser_name: str, description: str,
 
     # Obtain days_diff
     given_date = datetime.strptime(date, '%d/%m/%Y')
-    target_date = datetime.strptime("9/9/2023", '%d/%m/%Y')
+    target_date = datetime.strptime("15/9/2023", '%d/%m/%Y')
     delta = given_date - target_date
     days_diff = delta.days
 
@@ -82,11 +82,13 @@ def analyse_ad(ad_title: str, advertiser_name: str, description: str,
     min_days_diff = 0
     max_days_diff = 37
     normalized_days_diff = (days_diff - min_days_diff) / (max_days_diff - min_days_diff)
+    normalized_days_diff = 1 - normalized_days_diff;
     
     # Compute the average of the two normalized values
-    ad_score = round(abs((normalized_baseline_st - normalized_days_diff) / 2), 3)
+    ad_score = round(abs((normalized_baseline_st + normalized_days_diff) / 2), 3)
 
-    print(ad_score)
+    print(normalized_baseline_st)
+    print(normalized_days_diff)
 
     # Generate ad_id
     ad_id = str(uuid.uuid4())

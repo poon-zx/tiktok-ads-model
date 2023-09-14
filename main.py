@@ -59,6 +59,7 @@ sample_data = {
     }
 }
 
+checker = ViolationChecker(config_path = 'violations/config.yaml')
 
 @app.route('/')
 def home():
@@ -82,7 +83,6 @@ def upload():
         # print(data)
         # print(extract_frames_from_video(file, 10))
 
-        checker = ViolationChecker(config_path = 'violations/config.yaml')
         out = checker.get_results(ad_description = description, file_storage = file)
 
         video_violation_values = list(out["violation_labels"].values())
