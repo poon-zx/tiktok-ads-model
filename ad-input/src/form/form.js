@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import {useNavigate} from 'react-router-dom';
 import { Card, TextField, Button, InputLabel, MenuItem, OutlinedInput, Select, FormControl } from '@mui/material';
 import './form.css';
@@ -96,24 +96,10 @@ const AdForm = ({setParentState}) => {
                 for (const key in formData) {
                     dataToSend.append(key, formData[key]);
                 };
-
                 const file = fileUploadInput.current.files[0];
                 dataToSend.append(DEFAULT_FILE_NAME, file);
-          
-                // const response = await axios.post(FILE_UPLOAD_ENDPOINT, dataToSend, { headers });
-          
-                // console.log('Upload successful:', response.data);
-
-                // setParentState(response.data);
-
                 setParentState(dataToSend);
-                navigate('/result');
-
-                // navigate('/result', {formData: dataToSend});
-                // const formDataJSON = JSON.stringify(Object.fromEntries(dataToSend.entries()));
-                // navigate('/result', {state: {formData: formDataJSON}});
-          
-                // Now you can handle other form data submission if needed
+                navigate('/result'); // redirect to result page
               } catch (error) {
                 console.error('Error uploading file:', error);
               }
