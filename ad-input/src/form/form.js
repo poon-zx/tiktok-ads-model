@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
+import {useNavigate} from 'react-router-dom';
 import { Card, TextField, Button, InputLabel, MenuItem, OutlinedInput, Select, FormControl } from '@mui/material';
 import './form.css';
-import axios from 'axios';
 import Tiktok from '../tiktok.png'
 
 const AdForm = ({setParentState}) => {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         adTitle: '',
         advertiserName: '',
@@ -88,13 +89,8 @@ const AdForm = ({setParentState}) => {
         const handleSubmit = (e) => {
             e.preventDefault();
             const DEFAULT_FILE_NAME = 'videoFile';
-            const FILE_UPLOAD_ENDPOINT = 'http://127.0.0.1:5000/upload';
-            const headers = {
-                'Content-Type': 'multipart/form-data',
-              };
             (async () => {
               try {
-                console.log('Uploading file...');
                 const dataToSend = new FormData();
 
                 for (const key in formData) {
@@ -104,11 +100,18 @@ const AdForm = ({setParentState}) => {
                 const file = fileUploadInput.current.files[0];
                 dataToSend.append(DEFAULT_FILE_NAME, file);
           
-                const response = await axios.post(FILE_UPLOAD_ENDPOINT, dataToSend, { headers });
+                // const response = await axios.post(FILE_UPLOAD_ENDPOINT, dataToSend, { headers });
           
-                console.log('Upload successful:', response.data);
+                // console.log('Upload successful:', response.data);
 
-                setParentState(response.data);
+                // setParentState(response.data);
+
+                setParentState(dataToSend);
+                navigate('/result');
+
+                // navigate('/result', {formData: dataToSend});
+                // const formDataJSON = JSON.stringify(Object.fromEntries(dataToSend.entries()));
+                // navigate('/result', {state: {formData: formDataJSON}});
           
                 // Now you can handle other form data submission if needed
               } catch (error) {

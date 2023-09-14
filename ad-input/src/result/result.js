@@ -1,7 +1,10 @@
-import react, {useEffect, useRef} from 'react';
+import react, {useEffect, useRef, useState} from 'react';
 import { Card } from '@mui/material';
 import "./result.css"
 import score from "../score.png"
+import score2 from "../score_v2.png"
+import needle from "../needle-pointer.png"
+import axios from 'axios';
 
 const roundTo2dp = (string) => {
     return (parseFloat(string) * 100).toFixed(2)
@@ -48,7 +51,7 @@ const AdScoringSystem = ({data}) => {
                     marginRight: '15vw',
                     borderRadius: '10px',
                     }}>
-                <div style={{fontSize: '1.3rem', fontWeight: '500'}}>ad_score = β<sub>1</sub> ​× avg_ad_revenue + β<sub>2​</sub> × baseline_st + β<sub>3</sub> ​× days_diff +  β<sub>4</sub> x advertiser_tier</div>
+                <div style={{fontSize: '1.3rem', fontWeight: '500'}}>ad_score = β<sub>1</sub> ​× avg_ad_revenue + β<sub>2​</sub> × baseline_st - β<sub>3</sub> ​× days_diff +  β<sub>4</sub> x advertiser_tier</div>
                 <div style={{margin: '20px 0 0', fontSize: '1.3rem', fontWeight: '600'}}>Confidence : {data.ad_score_equation.confidence}</div>
             </Card>
         </>
@@ -56,6 +59,27 @@ const AdScoringSystem = ({data}) => {
 }
 
 const AdScoringValue = ({data}) => {
+    const needleRef = useRef(null)
+    const deg = data.ad_score_equation.score * 180 - 90
+    useEffect(() => {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.style.transform = `translate(-139.5px, 3.3px) rotate(${deg}deg)`
+              // entry.target.style.backgroundColor = color
+              observer.unobserve(entry.target)
+            }
+          })
+        }, {
+          threshold: 0.1
+        })
+    
+        observer.observe(needleRef.current)
+    
+        return () => {
+          observer.disconnect()
+        }
+      }, [deg])
     return (
         <div style={{display:'flex', justifyContent:'space-between', margin: '0 15vw'}}>
         <Card className="score-card" variant="outlined"
@@ -69,7 +93,11 @@ const AdScoringValue = ({data}) => {
                 alignItems: 'center'
                 }}>
             <div style={{textAlign: 'center'}}>
-                <img src={score} alt="score" style={{height: '80px'}}/>
+                <div style={{
+                }}>
+                    <img src={score2} alt="score" style={{height: '80px'}}/>
+                    <img ref={needleRef} src={needle} alt="needle" className='needle'/>
+                </div>
                 <div style={{fontSize: '1.3rem', fontWeight: '600'}}>ad_score : {data.ad_score_equation.score}</div>
             </div>
         </Card>
@@ -105,11 +133,11 @@ const ViolationType = ({data}) => {
                     padding: '20px', 
                     borderRadius: '10px'
                     }}>
-                    {violations ? Object.keys(violations).map((key) => (
-                        <>
-                        <div key={key} >{key} : {roundTo2dp(violations[key])}%</div>
-                        <ProgressBar width={`${violations[key] * 100}%`} color={"#6f8ecd"}></ProgressBar>
-                        </>
+                    {Object.keys(violations).length !== 0 ? Object.keys(violations).map((key) => (
+                        <div key={key}>
+                            <div >{key} : {roundTo2dp(violations[key])}%</div>
+                            <ProgressBar width={`${violations[key] * 100}%`} color={"#6f8ecd"}></ProgressBar>
+                        </div>
                     )) :
                         <div>No Violations Found</div>
                     }
@@ -131,12 +159,12 @@ const AdCategory = ({data}) => {
                     borderRadius: '10px'
                 }}
                 >
-                    {Object.keys(categories).map((key) => (
-                        <>
-                        <div key={key} >{key} : {roundTo2dp(categories[key])}%</div>
+                    {Object.keys(categories).length !== 0 ? Object.keys(categories).map((key) => (
+                        <div key={key}>
+                        <div >{key} : {roundTo2dp(categories[key])}%</div>
                         <ProgressBar width={`${categories[key] * 100}%`} color={"#6f8ecd"}></ProgressBar>
-                        </>
-                    ))}
+                        </div>
+                    )) : <div>No Ad Categories</div>}
                 </Card>
             </div>
         </>
@@ -232,13 +260,7 @@ const Utilization = ({data}) => {
     )
 };
 
-
-const Result = ({data}) => {
-    useEffect(() => {
-        console.log("data video violation: " )
-        console.log("this is the output" + data.violation_labels.Violence);
-    }, [data]);
-
+const ShowResult = ({data}) => {
     return (
         <div style={{margin: '20px 50px 80px'}}>
             <div style={{display: 'flex', justifyContent: 'center', flexDirection: 'column'}}>
@@ -258,6 +280,48 @@ const Result = ({data}) => {
             </div>
         </div>
     );
+}
+
+function Loading() {
+    return (
+      <>
+      <div className="loading-box">
+        <div className="spin-wrapper">
+          <div className="spinner">
+          </div>
+        </div>
+        <p className='loading'>Loading...</p>  
+      </div>
+      </>
+    )
+  }
+
+const Result = ({formData}) => {
+    const [data, setData] = useState(null)
+    useEffect(() => {
+        const FILE_UPLOAD_ENDPOINT = 'http://127.0.0.1:5000/upload';
+        const headers = {
+            'Content-Type': 'multipart/form-data',
+        };
+        const callAPI = async () => {
+            try {
+                await new Promise((resolve) => setTimeout(resolve, 2000)); // Wait for 2 seconds
+                const response = await axios.post(FILE_UPLOAD_ENDPOINT, formData, { headers });
+                console.log(`Data: ${response.data}`)
+                setData(response.data);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        console.log('Uploading file...');
+        callAPI();
+        console.log('Upload complete!')
+    }, [formData]);
+    return (
+        <>
+            {data ? <ShowResult data={data}></ShowResult> : <Loading></Loading>}
+        </>
+    )
 }
 
 export default Result;
